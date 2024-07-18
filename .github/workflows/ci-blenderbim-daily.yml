@@ -16,7 +16,7 @@ on:
       - 'src/ifc5d/ifc5d/**'
       - 'src/ifccityjson/**'
     branches:
-      - v0.8.0
+      - makefile-tests
   workflow_dispatch:
 
 jobs:
