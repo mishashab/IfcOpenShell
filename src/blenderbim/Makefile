@@ -116,6 +116,8 @@ dist:
 ifndef PLATFORM
 	$(error PLATFORM is not set)
 endif
+	echo Just me being curious
+	ls ..
 	rm -rf dist
 	mkdir -p dist/working
 	mkdir -p dist/blenderbim
