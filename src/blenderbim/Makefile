@@ -22,7 +22,10 @@ PATCH:=patch
 SED:=sed -i
 ifeq ($(OS),Windows_NT)
 HOSTOS:=win
+PYTHON:=python
+VENV_ACTIVATE:=Scripts/activate
 else
+VENV_ACTIVATE:=$(VENV_ACTIVATE)
 UNAME_S:=$(shell uname -s)
 ifeq ($(UNAME_S),Linux)
 HOSTOS:=linux
@@ -117,7 +120,7 @@ endif
 	# To scope any build-time dependencies
 	cd dist/working && $(PYTHON) -m venv env
 	$(PIP) install build
-	cd dist/working && . env/bin/activate && $(PIP) install wheel
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) install wheel
 
 	mkdir wheels
 	# Provides IfcOpenShell Python functionality
@@ -134,67 +137,67 @@ endif
 	cd ../ifc4d && make dist && cp dist/*.whl ../blenderbim/dist/blenderbim/wheels/
 	cd ../ifc5d && make dist && cp dist/*.whl ../blenderbim/dist/blenderbim/wheels/
 	cd ../ifccityjson && make dist && cp dist/*.whl ../blenderbim/dist/blenderbim/wheels/
-	cd dist/working && . env/bin/activate && $(PIP) download GitPython --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download GitPython --dest=../blenderbim/wheels
 	# Provides audio playback for costing
 	# This is a REALLY IMPORTANT feature
-	cd dist/working && . env/bin/activate && $(PIP) wheel git+https://github.com/Andrej730/aud.git --wheel-dir=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) wheel git+https://github.com/Andrej730/aud.git --wheel-dir=../blenderbim/wheels
 	# IfcOpenShell dependency - support for new typing features
-	cd dist/working && . env/bin/activate && $(PIP) download typing_extensions --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download typing_extensions --dest=../blenderbim/wheels
 	# Required by IfcCSV
-	cd dist/working && . env/bin/activate && $(PIP) download pandas $(PYPI_PLATFORM) --python-version $(PYPI_VERSION) --implementation $(PYPI_IMP) --only-binary=:all: --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download pandas $(PYPI_PLATFORM) --python-version $(PYPI_VERSION) --implementation $(PYPI_IMP) --only-binary=:all: --dest=../blenderbim/wheels
 	# Pandas ships with very heavy tests
 	# cd dist/working/site-packages/pandas && rm -rf tests
-	cd dist/working && . env/bin/activate && $(PIP) download openpyxl --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download openpyxl --dest=../blenderbim/wheels
 	# odfpy doesn't come with its own wheel, so whee'l (get it?) create it ourselves!
-	cd dist/working && . env/bin/activate && $(PIP) wheel odfpy --wheel-dir=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) wheel odfpy --wheel-dir=../blenderbim/wheels
 	# Required by IFCCityJSON
-	cd dist/working && . env/bin/activate && $(PIP) download cjio --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download cjio --dest=../blenderbim/wheels
 	# Provides express rule validation for ifcopenshell.validate
-	cd dist/working && . env/bin/activate && $(PIP) download pytest --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download pytest --dest=../blenderbim/wheels
 	# Provides Brickschema functionality
-	cd dist/working && . env/bin/activate && $(PIP) download "brickschema[persistence]==0.7.6a2" --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download "brickschema[persistence]==0.7.6a2" --dest=../blenderbim/wheels
 	# Required for SVG to DXF conversion
-	cd dist/working && . env/bin/activate && $(PIP) download ezdxf --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download ezdxf --dest=../blenderbim/wheels
 	# Required by bcf
-	cd dist/working && . env/bin/activate && $(PIP) download xsdata --dest=../blenderbim/wheels
-	cd dist/working && . env/bin/activate && $(PIP) download xmlschema --dest=../blenderbim/wheels
-	cd dist/working && . env/bin/activate && $(PIP) download elementpath --dest=../blenderbim/wheels
-	cd dist/working && . env/bin/activate && $(PIP) download six --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download xsdata --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download xmlschema --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download elementpath --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download six --dest=../blenderbim/wheels
 	# Required by drawing module
-	cd dist/working && . env/bin/activate && $(PIP) download lxml $(PYPI_PLATFORM) --python-version $(PYPI_VERSION) --implementation $(PYPI_IMP) --only-binary=:all: --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download lxml $(PYPI_PLATFORM) --python-version $(PYPI_VERSION) --implementation $(PYPI_IMP) --only-binary=:all: --dest=../blenderbim/wheels
 	# Required by qto and drawing module
-	cd dist/working && . env/bin/activate && $(PIP) download shapely $(PYPI_PLATFORM) --python-version $(PYPI_VERSION) --implementation $(PYPI_IMP) --only-binary=:all: --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download shapely $(PYPI_PLATFORM) --python-version $(PYPI_VERSION) --implementation $(PYPI_IMP) --only-binary=:all: --dest=../blenderbim/wheels
 	# Required by the BIM type manager thumbnail generator
-	cd dist/working && . env/bin/activate && $(PIP) download pillow $(PYPI_PLATFORM) --python-version $(PYPI_VERSION) --implementation $(PYPI_IMP) --only-binary=:all: --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download pillow $(PYPI_PLATFORM) --python-version $(PYPI_VERSION) --implementation $(PYPI_IMP) --only-binary=:all: --dest=../blenderbim/wheels
 	# Provides mustache templating in construction docs and web UI data
-	cd dist/working && . env/bin/activate && $(PIP) download pystache --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download pystache --dest=../blenderbim/wheels
 	# Provides SVG export in construction documentation
-	cd dist/working && . env/bin/activate && $(PIP) download svgwrite --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download svgwrite --dest=../blenderbim/wheels
 	# Provides fuzzy date parsing for construction sequencing
-	cd dist/working && . env/bin/activate && $(PIP) download python-dateutil --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download python-dateutil --dest=../blenderbim/wheels
 	# Provides duration parsing for construction sequencing
-	cd dist/working && . env/bin/activate && $(PIP) download isodate --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download isodate --dest=../blenderbim/wheels
 	# Provides networkx graph analysis for project dependency calculations
-	cd dist/working && . env/bin/activate && $(PIP) download networkx --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download networkx --dest=../blenderbim/wheels
 	# Required by IFCDiff
-	cd dist/working && . env/bin/activate && $(PIP) download deepdiff --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download deepdiff --dest=../blenderbim/wheels
 	# Required by IFCCSV and ifcopenshell.util.selector
-	cd dist/working && . env/bin/activate && $(PIP) download lark --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download lark --dest=../blenderbim/wheels
 	# Required by IFC4D
-	cd dist/working && . env/bin/activate && $(PIP) download PyP6Xer --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download PyP6Xer --dest=../blenderbim/wheels
 	# Required by web module
-	cd dist/working && . env/bin/activate && $(PIP) download python-socketio[asyncio_client] --dest=../blenderbim/wheels
-	cd dist/working && . env/bin/activate && $(PIP) download aiohttp --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download python-socketio[asyncio_client] --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download aiohttp --dest=../blenderbim/wheels
 	# Required by light module
-	cd dist/working && . env/bin/activate && $(PIP) download pytz --dest=../blenderbim/wheels
-	cd dist/working && . env/bin/activate && $(PIP) download tzfpy $(PYPI_PLATFORM) --python-version $(PYPI_VERSION) --implementation $(PYPI_IMP) --only-binary=:all: --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download pytz --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download tzfpy $(PYPI_PLATFORM) --python-version $(PYPI_VERSION) --implementation $(PYPI_IMP) --only-binary=:all: --dest=../blenderbim/wheels
 	# pyradiance is using different platform versions than defaults in our makefile.
 ifeq ($(PLATFORM), linux)
-	cd dist/working && . env/bin/activate && $(PIP) download pyradiance --platform manylinux_2_35_x86_64 --python-version $(PYPI_VERSION) --implementation $(PYPI_IMP) --only-binary=:all: --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download pyradiance --platform manylinux_2_35_x86_64 --python-version $(PYPI_VERSION) --implementation $(PYPI_IMP) --only-binary=:all: --dest=../blenderbim/wheels
 else ifeq ($(PLATFORM), macos)
-	cd dist/working && . env/bin/activate && $(PIP) download pyradiance --platform macosx_10_13_x86_64 --python-version $(PYPI_VERSION) --implementation $(PYPI_IMP) --only-binary=:all: --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download pyradiance --platform macosx_10_13_x86_64 --python-version $(PYPI_VERSION) --implementation $(PYPI_IMP) --only-binary=:all: --dest=../blenderbim/wheels
 else
-	cd dist/working && . env/bin/activate && $(PIP) download pyradiance $(PYPI_PLATFORM) --python-version $(PYPI_VERSION) --implementation $(PYPI_IMP) --only-binary=:all: --dest=../blenderbim/wheels
+	cd dist/working && . env/$(VENV_ACTIVATE) && $(PIP) download pyradiance $(PYPI_PLATFORM) --python-version $(PYPI_VERSION) --implementation $(PYPI_IMP) --only-binary=:all: --dest=../blenderbim/wheels
 endif
 	rm -rf dist/working
 
