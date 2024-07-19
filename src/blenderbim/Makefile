@@ -289,6 +289,11 @@ ifeq ($(PLATFORM), macos)
 	prev_whl_name=$$(find build/blenderbim/wheels/greenlet-*.whl); \
 	whl_name=$$(echo $$prev_whl_name | sed "s/_universal2/_x86_64/"); \
 	mv "$$prev_whl_name" "$$whl_name";
+
+	# has universal and amr64 builds.
+	prev_whl_name=$$(find build/blenderbim/wheels/fonttools-*.whl); \
+	whl_name=$$(echo $$prev_whl_name | sed "s/_universal2/_x86_64/"); \
+	mv "$$prev_whl_name" "$$whl_name";
 endif
 
 	$(PYTHON) scripts/get_wheels.py build/blenderbim/wheels build/blenderbim/blender_manifest.toml
