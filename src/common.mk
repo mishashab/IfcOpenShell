@@ -2,9 +2,12 @@ PYTHON:=python3.11
 PIP:=pip3.11
 VERSION:=$(shell cat ../../VERSION)
 SED:=sed -i
+VENV_ACTIVATE:=bin/activate
+
 ifeq ($(OS),Windows_NT)
 PYTHON:=python
 PIP:=pip
+VENV_ACTIVATE:=Scripts/activate
 endif
 ifeq ($(UNAME_S),Darwin)
 SED:=sed -i '' -e
@@ -24,7 +27,7 @@ ifdef IS_MODULE
 else
 	$(SED) 's/version = "0.0.0"/version = "$(VERSION)"/' build/$(PACKAGE_NAME)/__init__.py
 endif
-	cd build && $(PYTHON) -m venv env && . env/bin/activate && $(PIP) install build
-	cd build && . env/bin/activate && $(PYTHON) -m build
+	cd build && $(PYTHON) -m venv env && . env/$(VENV_ACTIVATE) && $(PIP) install build
+	cd build && . env/$(VENV_ACTIVATE) && $(PYTHON) -m build
 	cp build/dist/*.whl dist/
 	rm -rf build
